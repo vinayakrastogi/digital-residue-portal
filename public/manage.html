@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage File - Digital Residue Exchange Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="logo.png" alt="Logo" class="logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"36\" height=\"36\" viewBox=\"0 0 36 36\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0%\" stop-color=\"%238b5cf6\"/><stop offset=\"100%\" stop-color=\"%234f46e5\"/></linearGradient></defs><rect rx=\"8\" ry=\"8\" width=\"36\" height=\"36\" fill=\"url(%23g)\"/><text x=\"50%\" y=\"58%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-family=\"Inter,Arial\" font-size=\"16\" fill=\"white\">DR</text></svg>'">
+                <h1>Digital Residue Exchange</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="upload.html" class="nav-link">Upload</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="upload-section">
+                <h2 id="manageTitle">Manage File</h2>
+                <p id="manageSubtitle" class="text-muted">Update or delete your file using your secret code.</p>
+
+                <div id="manageUpdate" class="upload-form" style="display:none;">
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label for="secretCode">Secret Code *</label>
+                            <input type="text" id="secretCode" name="secret_code" required placeholder="Enter your 6-character secret code">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" placeholder="Leave blank to keep current">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Leave blank to keep current"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <input type="text" id="tags" name="tags" placeholder="Leave blank to keep current (comma separated)">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                    <div id="updateMessage" class="message" style="display:none;"></div>
+                </div>
+
+                <div id="manageDelete" class="upload-form" style="display:none;">
+                    <div class="form-group">
+                        <label for="delSecretCode">Secret Code *</label>
+                        <input type="text" id="delSecretCode" placeholder="Enter your 6-character secret code">
+                    </div>
+
+                    <div class="confirm-box">
+                        <p>Are you sure you want to delete this file?</p>
+                        <div class="confirm-actions">
+                            <button id="cancelDelete" class="btn btn-secondary" type="button">No</button>
+                            <button id="confirmDelete" class="btn btn-outline" type="button">Yes, delete</button>
+                        </div>
+                    </div>
+                    <div id="deleteMessage" class="message" style="display:none;"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Digital Residue Exchange Portal. Built for educational purposes.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Manage page script
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const action = params.get('action');
+            const id = params.get('id');
+
+            const manageUpdate = document.getElementById('manageUpdate');
+            const manageDelete = document.getElementById('manageDelete');
+            const titleEl = document.getElementById('manageTitle');
+            const subtitleEl = document.getElementById('manageSubtitle');
+
+            if (!action || !id) {
+                titleEl.textContent = 'Invalid request';
+                subtitleEl.textContent = 'Missing action or file id.';
+                return;
+            }
+
+            if (action === 'update') {
+                manageUpdate.style.display = 'block';
+                titleEl.textContent = 'Update File';
+                subtitleEl.textContent = 'Modify the details of your file.';
+
+                // Prefill with current data
+                fetch(`${API_BASE}/uploads/${id}`).then(r => r.json()).then(file => {
+                    if (file && file.id) {
+                        document.getElementById('title').placeholder = file.title || '';
+                        document.getElementById('description').placeholder = file.description || '';
+                        document.getElementById('tags').placeholder = file.tags || '';
+                    }
+                }).catch(() => {});
+
+                const updateForm = document.getElementById('updateForm');
+                const updateMessage = document.getElementById('updateMessage');
+                updateForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(updateForm);
+                    const payload = {
+                        secret_code: formData.get('secret_code') || '',
+                    };
+                    const title = formData.get('title')?.trim();
+                    const description = formData.get('description');
+                    const tags = formData.get('tags');
+                    if (title) payload.title = title;
+                    if (description !== null && description !== '') payload.description = description;
+                    if (tags !== null && tags !== '') payload.tags = tags;
+
+                    try {
+                        const res = await fetch(`${API_BASE}/uploads/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await res.json().catch(() => ({}));
+                        if (!res.ok) throw new Error(result.error || 'Failed to update');
+                        updateMessage.className = 'message success';
+                        updateMessage.textContent = 'Updated successfully';
+                        updateMessage.style.display = 'block';
+                    } catch (err) {
+                        updateMessage.className = 'message error';
+                        updateMessage.textContent = err.message || 'Update failed';
+                        updateMessage.style.display = 'block';
+                    }
+                });
+            } else if (action === 'delete') {
+                manageDelete.style.display = 'block';
+                titleEl.textContent = 'Delete File';
+                subtitleEl.textContent = 'This action cannot be undone.';
+
+                const cancelBtn = document.getElementById('cancelDelete');
+                const confirmBtn = document.getElementById('confirmDelete');
+                const deleteMessage = document.getElementById('deleteMessage');
+
+                cancelBtn.addEventListener('click', () => {
+                    window.location.href = 'index.html';
+                });
+                confirmBtn.addEventListener('click', async () => {
+                    const secret = document.getElementById('delSecretCode').value.trim();
+                    if (!secret) {
+                        deleteMessage.className = 'message error';
+                        deleteMessage.textContent = 'Secret code is required';
+                        deleteMessage.style.display = 'block';
+                        return;
+                    }
+                    try {
+                        const res = await fetch(`${API_BASE}/uploads/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ secret_code: secret })
+                        });
+                        const result = await res.json().catch(() => ({}));
+                        if (!res.ok) throw new Error(result.error || 'Failed to delete');
+                        deleteMessage.className = 'message success';
+                        deleteMessage.textContent = 'Deleted successfully';
+                        deleteMessage.style.display = 'block';
+                        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+                    } catch (err) {
+                        deleteMessage.className = 'message error';
+                        deleteMessage.textContent = err.message || 'Delete failed';
+                        deleteMessage.style.display = 'block';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+

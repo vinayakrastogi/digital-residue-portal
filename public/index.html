@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Residue Exchange Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="logo.png" alt="Logo" class="logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"36\" height=\"36\" viewBox=\"0 0 36 36\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0%\" stop-color=\"%238b5cf6\"/><stop offset=\"100%\" stop-color=\"%234f46e5\"/></linearGradient></defs><rect rx=\"8\" ry=\"8\" width=\"36\" height=\"36\" fill=\"url(%23g)\"/><text x=\"50%\" y=\"58%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-family=\"Inter,Arial\" font-size=\"16\" fill=\"white\"></text></svg>
+                <h1>Digital Residue Exchange</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="upload.html" class="nav-link">Upload</a>
+                <a href="search.html" class="nav-link">Search</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Moving Tags Marquee -->
+            <section class="tags-marquee">
+                <div class="marquee-content">
+                    <span class="tag-item">#python</span>
+                    <span class="tag-item">#art</span>
+                    <span class="tag-item">#design</span>
+                    <span class="tag-item">#dataset</span>
+                    <span class="tag-item">#code</span>
+                    <span class="tag-item">#illustration</span>
+                    <span class="tag-item">#crypto</span>
+                    <span class="tag-item">#recycle</span>
+                    <span class="tag-item">#innovation</span>
+                    <span class="tag-item">#openSource</span>
+                    <span class="tag-item">#python</span>
+                    <span class="tag-item">#art</span>
+                    <span class="tag-item">#design</span>
+                    <span class="tag-item">#dataset</span>
+                    <span class="tag-item">#code</span>
+                    <span class="tag-item">#illustration</span>
+                    <span class="tag-item">#crypto</span>
+                    <span class="tag-item">#recycle</span>
+                    <span class="tag-item">#innovation</span>
+                    <span class="tag-item">#openSource</span>
+                </div>
+            </section>
+
+            <!-- Animated Hero Section -->
+            <section class="hero">
+                <div class="hero-background"></div>
+                <div class="hero-content">
+                    <h2 class="hero-title">Recycling Digital Creativity</h2>
+                    <p class="hero-subtitle">Give your unused digital work a new purpose.</p>
+                    <a href="upload.html" class="btn btn-primary hero-cta">Start Uploading</a>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-icon">📁</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="filesCount">42</div>
+                            <div class="stat-label">Files Shared</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">📥</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="downloadsCount">128</div>
+                            <div class="stat-label">Total Downloads</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">❤️</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="likesCount">310</div>
+                            <div class="stat-label">Total Likes</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="uploads-section">
+                <div class="section-header">
+                    <h3>Recent Uploads</h3>
+                    <div class="loading" id="loading">Loading...</div>
+                </div>
+                <div class="uploads-grid" id="uploadsGrid">
+                    <!-- Uploads will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Digital Residue Exchange Portal. Built for educational purposes.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

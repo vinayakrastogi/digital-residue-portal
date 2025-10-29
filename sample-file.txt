@@ -1,0 +1,10 @@
+This is a sample file for testing the Digital Residue Exchange Portal.
+
+Features demonstrated:
+- File upload functionality
+- File download tracking
+- Like system
+- Search by title and tags
+- Leaderboard ranking
+
+You can upload this file through the web interface to test all the features!
