@@ -59,49 +59,33 @@ function formatFileSize(bytes) {
 // File Card Creation
 function createFileCard(file) {
     const tags = file.tags ? file.tags.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
-    
     return `
-        <div class="file-card" data-id="${file.id}" data-title="${escapeHtml(file.title)}" data-description="${escapeHtml(file.description || '')}" data-tags="${escapeHtml(file.tags || '')}">
+        <div class="file-card" data-id="${file.id}" onclick="openFile(${file.id})">
             <div class="mini-actions">
-                <a class="mini-btn" title="Update" href="manage.html?action=update&id=${file.id}">✏️</a>
-                <a class="mini-btn danger" title="Delete" href="manage.html?action=delete&id=${file.id}">🗑️</a>
+                <a class="mini-btn" title="Update" href="manage.html?action=update&id=${file.id}" onclick="event.stopPropagation()">✏️</a>
+                <a class="mini-btn danger" title="Delete" href="manage.html?action=delete&id=${file.id}" onclick="event.stopPropagation()">🗑️</a>
             </div>
-            <h4>${escapeHtml(file.title)}</h4>
-            ${file.description ? `<p class="file-description">${escapeHtml(file.description)}</p>` : ''}
-            
-            ${tags.length > 0 ? `
-                <div class="file-tags">
-                    ${tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
-                </div>
-            ` : ''}
-            
-            <div class="file-meta">
-                <div class="file-stats">
-                    <div class="stat">
-                        <span>❤️</span>
-                        <span>${file.like_count}</span>
+            <div style="width:80%; margin:0 auto 12px;">
+                <img src="/uploads/${file.filename}" alt="image" style="width:100%; height:260px; object-fit:cover; border-radius:12px; background:#0e0e0e;">
+            </div>
+            <div>
+                <h4 style="margin-top:0;">${escapeHtml(file.title)}</h4>
+                ${file.description ? `<p class="file-description">${escapeHtml(file.description)}</p>` : ''}
+                ${tags.length > 0 ? (
+                    `<div class="file-tags">${tags.map(tag => `<span class=\"tag\">${escapeHtml(tag)}</span>`).join('')}</div>`
+                ) : ''}
+                <div class="file-meta">
+                    <div class="file-stats">
+                        <div class="stat"><span>❤️</span><span>${file.like_count}</span></div>
+                        <div class="stat"><span>📥</span><span>${file.download_count}</span></div>
                     </div>
-                    <div class="stat">
-                        <span>📥</span>
-                        <span>${file.download_count}</span>
-                    </div>
+                    <div class="file-uploader">by ${escapeHtml(file.uploader_name)}</div>
                 </div>
-                <div class="file-uploader">
-                    by ${escapeHtml(file.uploader_name)}
+                <div class="file-actions">
+                    <button class="btn btn-outline like-btn" onclick="event.stopPropagation(); likeFile(${file.id})">❤️ Like</button>
+                    <a href="${API_BASE}/download/${file.id}" class="btn btn-primary download-btn" download onclick="event.stopPropagation()">📥 Download</a>
                 </div>
-            </div>
-            
-            <div class="file-actions">
-                <button class="btn btn-outline like-btn" onclick="likeFile(${file.id})">
-                    ❤️ Like
-                </button>
-                <a href="${API_BASE}/download/${file.id}" class="btn btn-primary download-btn" download>
-                    📥 Download
-                </a>
-            </div>
-            
-            <div class="file-date">
-                Uploaded on ${formatDate(file.upload_date)}
+                <div class="file-date">Uploaded on ${formatDate(file.upload_date)}</div>
             </div>
         </div>
     `;
@@ -325,6 +309,7 @@ function loadUploadPage() {
     const fileInput = document.getElementById('file');
     const fileInfo = document.getElementById('fileInfo');
     const uploadBtn = document.getElementById('uploadBtn');
+    const logoInput = document.getElementById('logo');
     
     if (!uploadForm) return;
     
@@ -380,6 +365,7 @@ function loadUploadPage() {
             }
             uploadForm.reset();
             fileInfo.innerHTML = '';
+            if (logoInput) logoInput.value = '';
             
         } catch (error) {
             console.error('Upload error:', error);
@@ -445,6 +431,7 @@ function initializePage() {
 
 // Global functions for HTML onclick handlers
 window.likeFile = likeFile;
+window.openFile = (id) => { window.location.href = `file.html?id=${id}`; };
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializePage);

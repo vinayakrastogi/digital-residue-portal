@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Residue Exchange Portal</title>
+    <title>PixelVault</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
-            <div class="nav-brand">
-                <img src="logo.png" alt="Logo" class="logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"36\" height=\"36\" viewBox=\"0 0 36 36\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0%\" stop-color=\"%238b5cf6\"/><stop offset=\"100%\" stop-color=\"%234f46e5\"/></linearGradient></defs><rect rx=\"8\" ry=\"8\" width=\"36\" height=\"36\" fill=\"url(%23g)\"/><text x=\"50%\" y=\"58%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-family=\"Inter,Arial\" font-size=\"16\" fill=\"white\"></text></svg>
-                <h1>Digital Residue Exchange</h1>
-            </div>
+            <div class="nav-brand"><a href="index.html" class="brand-link" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;"><img src="logo.png" alt="Logo" class="logo"><h1>PixelVault</h1></a></div>
             <div class="nav-links">
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="upload.html" class="nav-link">Upload</a>
@@ -54,9 +51,23 @@
             <section class="hero">
                 <div class="hero-background"></div>
                 <div class="hero-content">
-                    <h2 class="hero-title">Recycling Digital Creativity</h2>
+                    <h2 class="hero-title">Share Your Best Pixels</h2>
                     <p class="hero-subtitle">Give your unused digital work a new purpose.</p>
                     <a href="upload.html" class="btn btn-primary hero-cta">Start Uploading</a>
+                </div>
+            </section>
+
+            <!-- CTA Cards Section -->
+            <section class="cta-section">
+                <div class="cta-grid">
+                    <a class="cta-card" href="upload.html">
+                        <div class="cta-title">Upload Image</div>
+                        <div class="cta-sub">Share your best pixels with the world</div>
+                    </a>
+                    <a class="cta-card" href="search.html">
+                        <div class="cta-title">Search Gallery</div>
+                        <div class="cta-sub">Discover and download community images</div>
+                    </a>
                 </div>
             </section>
 
@@ -100,7 +111,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Digital Residue Exchange Portal. Built for educational purposes.</p>
+        <p>&copy; 2024 PixelVault. Built for educational purposes.</p>
     </footer>
 
     <script src="script.js"></script>
